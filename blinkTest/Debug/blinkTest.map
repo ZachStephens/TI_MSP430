@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v16.9.6                     
 ******************************************************************************
->> Linked Fri Jan 26 18:50:18 2018
+>> Linked Fri Jan 26 21:46:55 2018
 
 OUTPUT FILE NAME:   <blinkTest.out>
 ENTRY POINT SYMBOL: "_c_int00_noinit_noargs_noexit"  address: 0000c028

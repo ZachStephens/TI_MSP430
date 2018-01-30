@@ -9,21 +9,21 @@ CMD_SRCS += \
 ../lnk_msp430g2553.cmd 
 
 C_SRCS += \
-../toggleBlink.c 
+../main.c 
 
 C_DEPS += \
-./toggleBlink.d 
+./main.d 
 
 OBJS += \
-./toggleBlink.obj 
+./main.obj 
 
 OBJS__QUOTED += \
-"toggleBlink.obj" 
+"main.obj" 
 
 C_DEPS__QUOTED += \
-"toggleBlink.d" 
+"main.d" 
 
 C_SRCS__QUOTED += \
-"../toggleBlink.c" 
+"../main.c" 
 
 

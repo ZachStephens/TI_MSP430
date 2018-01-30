@@ -1,40 +1,35 @@
 #include <msp430.h>
 
-unsigned int t1;
-#define interrupt(x) void __attribute__((interrupt (x)))
+static unsigned int t1;
+#define G_LED BIT6                        // Green G_LED -> P1.6
 
-interrupt(TIMER0_A0_VECTOR) tmr_ccr0 () {
-    // interrupt flag is automatically reset
-    // ccr0
-    TA0R=0;
-    //if(++t1 == 1000){
-       P1OUT ^= ~(BIT0);
-    //    t1=0;
-    //}
+#pragma vector = TIMER0_A0_VECTOR       // CCR0 Interrupt Vector
+__interrupt void CCR0_ISR(void)
+{
+    TA0CTL &= ~TAIFG;               //clear timer A interrupt flag
+
+
+    P1OUT ^= G_LED;                   //Toggle G_LED
 }
 
-int main() {
-    WDTCTL = WDTPW + WDTHOLD;
+void main(void)
+{
+    WDTCTL = WDTPW + WDTHOLD;           //watchdog
 
-    // configure clocks
-    DCOCTL  =  CALDCO_1MHZ;
-    //BCSCTL1 =  CALBC1_1MHZ;
 
-    // i/o
-    P1DIR = BIT6 | BIT0;
-    P1OUT = 0x00;
 
-    // timer
-    TACCR0 = 0xFFFF-1;     // 1 ms
-    //TACCR1 = 0xFFFF;     // 2 ms
+    P1DIR |= G_LED;                       // Set G_LED pin -> Output
+    P1OUT &=~ G_LED;                      // Turn OFF G_LED
 
-    TACCTL0 = CCIE;
-    //TACCTL1 = CCIE;
+    TACCR0 = 1000;                      // Set Timer Timeout Value
+    TACCTL0 |= CCIE;                   // Enable Overflow Interrupt
+    TACTL |=   MC_1                    // mode count up to CCR0
+             | TASSEL_1     // clock source A_clk
+             | TACLR        //timer A counter clear
+             |  ID_2;       //divides A clock by 1,2,4 or 8 if 0,1,2,or 3 respectively
 
-    TACTL = TASSEL_2 | MC_2 | TAIE;
-
-    t1=0;
-    __enable_interrupt();
-    for (;;) {}
-    return 0;
+    BCSCTL3 |= LFXT1S_2;    //sets clock to internal oscillator (VLO)
+    __bis_SR_register(LPM3_bits + GIE); // Goto LPM3 (Only ACLK active), Enable CPU Interrupt
 }
+
+

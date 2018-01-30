@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v16.9.6                     
 ******************************************************************************
->> Linked Fri Jan 26 19:40:13 2018
+>> Linked Fri Jan 26 21:46:59 2018
 
 OUTPUT FILE NAME:   <toggleBlink.out>
 ENTRY POINT SYMBOL: "_c_int00_noinit_noargs_noexit"  address: 0000c04e
@@ -49,7 +49,7 @@ section   page    origin      length       input sections
                   000003b2    0000004e     --HOLE--
 
 .text      0    0000c000    00000072     
-                  0000c000    0000004e     toggleBlink.obj (.text:main)
+                  0000c000    0000004e     main.obj (.text:main)
                   0000c04e    00000012     rts430_eabi.lib : boot_special.obj (.text:_c_int00_noinit_noargs_noexit)
                   0000c060    00000008                     : isr_trap.obj (.text:_isr:__TI_ISR_TRAP)
                   0000c068    00000006                     : exit.obj (.text:abort)
@@ -119,7 +119,7 @@ MODULE SUMMARY
        Module             code   ro data   rw data
        ------             ----   -------   -------
     .\
-       toggleBlink.obj    78     0         0      
+       main.obj           78     0         0      
     +--+------------------+------+---------+---------+
        Total:             78     0         0      
                                                   
