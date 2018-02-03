@@ -120,34 +120,34 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-WatchdogExample.out \
+P3_WatchdogExample.out \
 
 EXE_OUTPUTS__QUOTED += \
-"WatchdogExample.out" \
+"P3_WatchdogExample.out" \
 
 BIN_OUTPUTS += \
-WatchdogExample.hex \
+P3_WatchdogExample.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"WatchdogExample.hex" \
+"P3_WatchdogExample.hex" \
 
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "WatchdogExample.out"
+	@$(MAKE) --no-print-directory -Onone "P3_WatchdogExample.out"
 
 # Tool invocations
-WatchdogExample.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+P3_WatchdogExample.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: MSP430 Linker'
-	"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/bin/cl430" -vmsp --use_hw_mpy=none --advice:power=all --define=__MSP430G2553__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number -z -m"WatchdogExample.map" --heap_size=80 --stack_size=80 -i"Q:/Applications/CodeComposerStudio/ccsv7/ccs_base/msp430/include" -i"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/lib" -i"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="WatchdogExample_linkInfo.xml" --use_hw_mpy=none --rom_model -o "WatchdogExample.out" $(ORDERED_OBJS)
+	"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/bin/cl430" -vmsp --use_hw_mpy=none --advice:power=all --define=__MSP430G2553__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number -z -m"P3_WatchdogExample.map" --heap_size=80 --stack_size=80 -i"Q:/Applications/CodeComposerStudio/ccsv7/ccs_base/msp430/include" -i"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/lib" -i"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="P3_WatchdogExample_linkInfo.xml" --use_hw_mpy=none --rom_model -o "P3_WatchdogExample.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-WatchdogExample.hex: $(EXE_OUTPUTS)
+P3_WatchdogExample.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: MSP430 Hex Utility'
-	"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "WatchdogExample.hex" $(EXE_OUTPUTS__QUOTED)
+	"Q:/Applications/CodeComposerStudio/ccsv7/tools/compiler/ti-cgt-msp430_16.9.6.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "P3_WatchdogExample.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 
