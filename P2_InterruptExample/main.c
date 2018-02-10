@@ -25,7 +25,7 @@ void main(void)
              |  ID_0;       //divides A clock by 1,2,4 or 8 if 0,1,2,or 3 respectively
 
     //BCSCTL3 |= LFXT1S_2;    //sets clock to internal oscillator (VLO)
-    __bis_SR_register(GIE); // Goto LPM3 (Only ACLK active), Enable CPU Interrupt
+    __bis_SR_register(GIE); // Enable CPU Interrupt
 }
 
 
