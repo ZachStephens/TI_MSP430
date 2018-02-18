@@ -24,6 +24,9 @@ int main(void)
     UC0IE |= UCA0RXIE; // Enable USCI_A0 RX interrupt
 
     serialInit();
+
+    serialsendbytes("Hello ",6);
+    serialsendbytes("world!\r\r",8);
     __bis_SR_register(CPUOFF + GIE); // Enter LPM0 w/ int until Byte RXed
     while (1)
     { }

@@ -2,8 +2,11 @@
 #include <msp430.h>
 #include "zs_msp430_Uart.h"
 
-const char serialBuffer[40];
-const char* buffHead, buffTail;
+
+
+char serialBuffer[TBUFFSIZE];
+unsigned short buffHead;
+unsigned short buffTail;
 
 void setupUCA0forSMCLK(){
     UCA0CTL1 |= UCSSEL_2; // SMCLK --UCSSEL_1 would select external crystal
@@ -19,16 +22,24 @@ void setupUCA0_115200(){
 
 
 void serialInit(){
-    buffHead = serialBuffer[0];
-    buffTail = serialBuffer[0];
+    buffHead = 0;
+    buffTail = 0;
 }
 
-int sendByte(char b){
-    if(buffHead == buffTail)
+unsigned short inline serialBufferisFull(){
+    if((buffHead + 1) % TBUFFSIZE == buffTail){
+        return True;
+    }
+    return False;
+}
+
+int sendByte(char B){
+    if(serialBufferisFull())
         return -1;
-    serialBuffer[buffHead] = *b;
-    buffHead++;
-    buffHead %= 40;
+
+
+    serialBuffer[buffHead] = B;
+    buffHead= (++buffHead) % TBUFFSIZE;
     UC0IE |= UCA0TXIE;
 
     return 0;
@@ -37,18 +48,18 @@ int sendByte(char b){
 void serialsendbytes(char * p,unsigned int n){
     unsigned int i = 0;
     while(i < n){
-       sendByte; // Enable USCI_A0 TX interrupt
+       while(sendByte(*(p++)) != 0); // Enable USCI_A0 TX interrupt
     }
-
 }
+
 
 
 #pragma vector=USCIAB0TX_VECTOR
 __interrupt void USCI0TX_ISR(void)
 {
     P1OUT |= TXLED;
-    UCA0TXBUF = string[i++]; // TX next character
-    if (i == sizeof string - 1) // TX over?
+    UCA0TXBUF = serialBuffer[buffTail]; // TX next character
+    if (buffTail == buffHead) // TX over?
         UC0IE &= ~UCA0TXIE; // Disable USCI_A0 TX interrupt
     P1OUT &= ~TXLED;
 }
@@ -59,9 +70,8 @@ __interrupt void USCI0RX_ISR(void)
     P1OUT |= RXLED;
     if (UCA0RXBUF == 'a') // 'a' received?
     {
-        i = 0;
-        UC0IE |= UCA0TXIE; // Enable USCI_A0 TX interrupt
-        UCA0TXBUF = string[i++];
+            //
+        serialsendbytes("caught a\r\n",10);
     }
     P1OUT &= ~RXLED;
 }
