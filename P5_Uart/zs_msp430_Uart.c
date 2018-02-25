@@ -39,7 +39,7 @@ int sendByte(char B){
 
 
     serialBuffer[buffHead] = B;
-    buffHead= (++buffHead) % TBUFFSIZE;
+    buffHead= (buffHead +1) % TBUFFSIZE;
     UC0IE |= UCA0TXIE;
 
     return 0;
@@ -48,7 +48,7 @@ int sendByte(char B){
 void serialsendbytes(char * p,unsigned int n){
     unsigned int i = 0;
     while(i < n){
-       while(sendByte(*(p++)) != 0); // Enable USCI_A0 TX interrupt
+       while(sendByte(*(p++)) != 0); // send when buffer is not full
     }
 }
 
@@ -58,8 +58,8 @@ void serialsendbytes(char * p,unsigned int n){
 __interrupt void USCI0TX_ISR(void)
 {
     P1OUT |= TXLED;
-    UCA0TXBUF = serialBuffer[buffTail]; // TX next character
-    if (buffTail == buffHead) // TX over?
+    UCA0TXBUF = serialBuffer[buffTail++]; // TX next character
+    if (buffTail == buffHead) // buffer full?
         UC0IE &= ~UCA0TXIE; // Disable USCI_A0 TX interrupt
     P1OUT &= ~TXLED;
 }
