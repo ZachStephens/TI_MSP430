@@ -5,8 +5,10 @@
 
 
 char serialBuffer[TBUFFSIZE];
+//need to write rx buffer
 unsigned short buffHead;
 unsigned short buffTail;
+unsigned char rFlag;
 
 void setupUCA0forSMCLK(){
     UCA0CTL1 |= UCSSEL_2; // SMCLK --UCSSEL_1 would select external crystal
@@ -69,10 +71,12 @@ __interrupt void USCI0TX_ISR(void)
 __interrupt void USCI0RX_ISR(void)
 {
     P1OUT |= RXLED;
-    if (UCA0RXBUF == 'a') // 'a' received?
-    {
+   /* if (UCA0RXBUF == 'a') // 'a' received?
+    {*/
             //
-        serialsendbytes("caught a\r\n",10);
-    }
+        serialsendbytes("caught ",7);
+        sendByte(UCA0RXBUF);
+        serialsendbytes("\r\n",2);
+    //}
     P1OUT &= ~RXLED;
 }
