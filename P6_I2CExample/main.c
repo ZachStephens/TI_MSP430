@@ -6,6 +6,46 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define PRECISION 5
+
+char itoa(int i){
+    if((i < 0) || (i > 9)){
+        return -1;
+    }
+
+    return '0' + (char)i;
+}
+
+//float to char array expecting array of size 10
+//-,d1,d0,.,d.1,d.01,d.001...
+void float2char(float data,char * buff,int places){
+    char isNeg = (data < 0)?1:0;
+    char isTen;
+    int leftdigs = (int)data;
+    int buff_i = 4;
+
+    if(isNeg){
+            data*=-1;
+            leftdigs*=-1;
+    }
+    isTen = (data > 9)?1:0;
+
+    buff[0] = (isNeg)?((isTen)?'-':' '):' ';
+    buff[1] = (isTen)?1:((isNeg)?'-':' ');
+    buff[2] = itoa(((int)data) - ((isTen)?10:0));
+    buff[3] = '.';
+
+    data = data - (float)leftdigs;
+    while(places-- > 0){
+        data *= 10;
+        leftdigs = (int)data;
+        buff[buff_i++] = itoa((int)data);
+        data = data - (float)leftdigs;
+    }
+
+}
+
+
 int main(void) {
 
          ACC_DATA_RAW raw_acc_data;
@@ -40,7 +80,7 @@ int main(void) {
          serialsendbytes("Hello ",6);
          serialsendbytes("world!\r\n",8);
          who_am_i = MPU6050_CheckI2C();
-         MPU6050_Init(GYRO_CONFIG_250,ACC_CONFIG_4G);
+         MPU6050_Init(GYRO_CONFIG_250,ACC_CONFIG_2G);
          __delay_cycles(10000);
 //initialize uart
          serialsendbytes("Hello ",6);
@@ -52,17 +92,21 @@ int main(void) {
              MPU6050_AccConvertData(raw_acc_data,&scaled_acc_data);
 
 
-
+            // sprintf(printBuf,"%f%f%f",scaled_acc_data.x,scaled_acc_data.y,scaled_acc_data.z);
 
              __delay_cycles(10000);
-             itoa(raw_acc_data.x,printBuf,10);
-             serialsendbytes(printBuf,2);
+             float2char(scaled_acc_data.x,printBuf,PRECISION);
+             serialsendbytes(printBuf,4+PRECISION);
              sendByte(' ');
-             itoa(raw_acc_data.y,printBuf,10);
-             serialsendbytes(printBuf,2);
+             float2char(scaled_acc_data.y,printBuf,PRECISION);
+             serialsendbytes(printBuf,4+PRECISION);
              sendByte(' ');
-             itoa(raw_acc_data.z,printBuf,10);
-             serialsendbytes(printBuf,2);
-             sendByte('\n');
+             float2char(scaled_acc_data.z,printBuf,PRECISION);
+             serialsendbytes(printBuf,4+PRECISION);
+             //sendByte('\n');
+             sendByte('\r');
          }
 }
+
+
+

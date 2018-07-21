@@ -70,7 +70,7 @@ static int16_t Acc_OffsetValueY = 0;
 static int16_t Acc_OffsetValueZ = 0;
 
 /* Scale Value config for ACC - default is 2G*/
-static float Acc_scaleValue  = SCALED_ACC_2G;
+static float Acc_scaleValue  = SCALED_ACC_16G;
 
 /* Scale Value config for GYRO - default is 2G*/
 static float Gyro_scaleValue = SCALED_GYRO_250;
